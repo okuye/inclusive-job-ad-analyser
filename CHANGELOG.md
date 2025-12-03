@@ -45,6 +45,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Web-first architecture**: Complete redesign with tabbed Gradio interface
+- **Four input methods in web UI**: Manual input, file upload, URL scraping, job board search
+- **Batch job search**: Search and analyze up to 20 positions simultaneously
+- **CSV export**: Download analysis results for multiple jobs
+- **Enhanced web UI**: Visual highlighting, expandable details, progress indicators
+- **Multiple deployment options**: Docker, Docker Compose, cloud platforms
+- **Simplified launcher**: `python -m inclusive_job_ad_analyser` launches web UI by default
+- **Standalone script**: `run_app.py` with port and share options
+- **Deployment guide**: Complete documentation for Docker, Hugging Face, Railway, Render, AWS/GCP/Azure
 - Job board search functionality for finding and analyzing multiple jobs
 - CLI arguments: `--search` for queries, `--source` for job board selection, `--location` for filtering, `--max-results` for limiting results
 - Support for searching Indeed, LinkedIn, and Glassdoor job boards
@@ -55,6 +64,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Optional dependencies: requests and beautifulsoup4
 - Test suite for scraper module
 - Example URLs file for testing web scraping
+
+### Changed
+- **Default interface**: Web UI is now primary interface; CLI accessible via `--cli` flag
+- **Documentation**: Reorganized to emphasize web interface first
+- **README**: Updated with web-first quick start
+- **QUICKSTART**: Simplified to 4 steps with web interface prominence
+
+### Technical
+- Added `__main__.py` for module execution
+- Created `run_app.py` launcher script
+- Added Dockerfile and docker-compose.yml
+- Enhanced webapp.py with 4 tabbed input methods
+- Integrated file upload handling
+- Added HTML report generation for batch results
 
 ### Planned
 - ML-based context scoring

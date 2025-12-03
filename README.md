@@ -47,36 +47,56 @@ git clone https://github.com/okuye/inclusive-job-ad-analyser.git
 cd inclusive-job-ad-analyser
 
 # Create virtual environment
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
 
-# Download spaCy model (recommended)
+# Download spaCy model
 python -m spacy download en_core_web_sm
+
+# Optional: Install web scraping dependencies
+pip install requests beautifulsoup4
 ```
 
-### Basic Usage (CLI)
+### Web Interface (Recommended)
+
+```bash
+# Launch the web application (default method)
+python -m inclusive_job_ad_analyser
+
+# Or use the launcher script
+python run_app.py
+
+# With custom port
+python run_app.py --port 8080
+
+# Create public shareable link
+python run_app.py --share
+```
+
+**Open http://127.0.0.1:7860 in your browser**
+
+The web interface provides four ways to analyze job ads:
+- ✍️ **Manual Input**: Paste job descriptions directly
+- 📁 **File Upload**: Upload .txt, .md, .doc files
+- 🌐 **URL Scraper**: Extract and analyze from LinkedIn, Indeed, Glassdoor
+- 🔎 **Job Search**: Search job boards and analyze multiple positions at once
+
+No command line required! Everything works through the browser.
+
+### Command Line Interface
 
 ```bash
 # Analyse a job ad file
-python -m inclusive_job_ad_analyser.cli examples/biased_job_ad.md
-
-# Output JSON format
-python -m inclusive_job_ad_analyser.cli examples/biased_job_ad.md --format json
+python -m inclusive_job_ad_analyser --cli examples/biased_job_ad.md
 
 # Search job boards and analyse results
-python -m inclusive_job_ad_analyser.cli --search "software engineer" --source indeed --max-results 10
-
-# Search with location filter
-python -m inclusive_job_ad_analyser.cli --search "data analyst" --source linkedin --location "Remote" --max-results 5
+python -m inclusive_job_ad_analyser --cli --search "software engineer" --source indeed --max-results 10
 
 # Scrape and analyse job ad from URL
-python -m inclusive_job_ad_analyser.cli --url https://www.linkedin.com/jobs/view/123456
-
-# Batch scrape multiple URLs from file
-python -m inclusive_job_ad_analyser.cli --urls-file examples/job_urls.txt --format json
+python -m inclusive_job_ad_analyser --cli --url https://www.linkedin.com/jobs/view/123456
 
 # Analyse from stdin
 cat job_ad.txt | python -m inclusive_job_ad_analyser.cli --stdin

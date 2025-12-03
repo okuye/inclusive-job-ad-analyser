@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  inclusive-job-analyzer:
+    build: .
+    ports:
+      - "7860:7860"
+    environment:
+      - GRADIO_SERVER_NAME=0.0.0.0
+      - GRADIO_SERVER_PORT=7860
+    volumes:
+      # Mount config for custom settings
+      - ./config:/app/config
+      # Mount data for custom bias terms
+      - ./data:/app/data
+    restart: unless-stopped
+    container_name: job-ad-analyzer
+    
+    # Optional: Add health check
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7860"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

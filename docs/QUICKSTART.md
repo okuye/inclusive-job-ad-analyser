@@ -20,85 +20,75 @@ python -m spacy download en_core_web_sm
 
 ## Try It Out (1 minute)
 
-### Command Line
+### Web Interface (Recommended)
 
 ```bash
-# Analyse the biased example
-python -m inclusive_job_ad_analyser.cli examples/biased_job_ad.md
+# Start web app (easiest method)
+python -m inclusive_job_ad_analyser
 
-# Analyse the neutral example
-python -m inclusive_job_ad_analyser.cli examples/neutral_job_ad.md
+# Or use the launcher
+python run_app.py
 ```
 
-### Web Interface
+Open http://127.0.0.1:7860 in your browser and you'll see four tabs:
+1. **Manual Input** - Paste job descriptions
+2. **Upload File** - Drag & drop files
+3. **Scrape URL** - Enter job posting URLs
+4. **Search Jobs** - Search Indeed, LinkedIn, Glassdoor
+
+### Command Line (Advanced)
 
 ```bash
-# Start web app
-python -m inclusive_job_ad_analyser.webapp
-
-# Open http://127.0.0.1:7860 in browser
-# Paste a job ad and click "Analyze"
+# Analyse with CLI
+python -m inclusive_job_ad_analyser --cli examples/biased_job_ad.md
 ```
 
-## Analyse Your Own Job Ad (2 minutes)
+## Analyse Your Own Job Ad (1 minute)
 
-### Option 1: Search Job Boards
+### Using Web Interface (No Code Required!)
 
-```bash
-# Search Indeed for jobs and analyse them
-python -m inclusive_job_ad_analyser.cli --search "software engineer" --source indeed --max-results 10
+Just open the web app and choose your method:
 
-# Search LinkedIn with location filter
-python -m inclusive_job_ad_analyser.cli --search "data analyst" --source linkedin --location "New York, NY"
+**Option 1: Manual Input Tab**
+- Paste your job description
+- Click "Analyze"
+- Get instant results with visual highlighting
 
-# Search Glassdoor for remote positions
-python -m inclusive_job_ad_analyser.cli --search "product manager" --source glassdoor --location "Remote" --max-results 5
+**Option 2: Upload File Tab**
+- Drag and drop .txt, .md, or .doc files
+- Click "Analyze File"
+- View extracted text and analysis
 
-# Output results as JSON
-python -m inclusive_job_ad_analyser.cli --search "UX designer" --format json --output results.json
-```
+**Option 3: Scrape URL Tab**
+- Paste a LinkedIn, Indeed, or Glassdoor URL
+- Click "Scrape & Analyze"
+- Get job title, company, and full analysis
 
-**Note**: Web scraping requires optional dependencies:
+**Option 4: Search Jobs Tab**
+- Enter search query (e.g., "software engineer")
+- Select job board (Indeed, LinkedIn, Glassdoor)
+- Add location (optional)
+- Set max results (1-20)
+- Click "Search & Analyze"
+- Download CSV report of all results
+
+**Note**: URL scraping and job search require optional dependencies:
 ```bash
 pip install requests beautifulsoup4
 ```
 
-### Option 2: Scrape from URL
+### Using Command Line (Advanced Users)
 
 ```bash
-# Scrape and analyse a job posting from LinkedIn
-python -m inclusive_job_ad_analyser.cli --url https://www.linkedin.com/jobs/view/123456
+# Search job boards
+python -m inclusive_job_ad_analyser --cli --search "software engineer" --source indeed
 
-# Scrape from Indeed
-python -m inclusive_job_ad_analyser.cli --url https://www.indeed.com/viewjob?jk=abc123
+# Scrape URL
+python -m inclusive_job_ad_analyser --cli --url https://www.linkedin.com/jobs/view/123456
 
-# Batch scrape multiple URLs
-python -m inclusive_job_ad_analyser.cli --urls-file examples/job_urls.txt
+# Analyze file
+python -m inclusive_job_ad_analyser --cli examples/biased_job_ad.md
 ```
-
-### Option 3: Save to file
-
-```bash
-# Create a file with your job ad
-cat > my_job_ad.txt << 'EOF'
-Senior Developer
-
-We need a rockstar engineer to join our young team...
-EOF
-
-# Analyse it
-python -m inclusive_job_ad_analyser.cli my_job_ad.txt
-```
-
-### Option 4: Use stdin
-
-```bash
-echo "We need a rockstar developer" | python -m inclusive_job_ad_analyser.cli --stdin
-```
-
-### Option 5: Web interface
-
-Just paste your text into the web app!
 
 ## Understanding the Output
 
@@ -126,30 +116,67 @@ For each issue:
 
 ## Common Use Cases
 
-### Batch Processing Multiple Job Ads
+### Batch Analysis of Multiple Job Postings
+
+Use the **Search Jobs** tab in the web interface:
+1. Enter your search query
+2. Select job board
+3. Set max results (up to 20)
+4. Click "Search & Analyze"
+5. Download CSV report with all results
+
+### Analyzing Existing Job Postings
+
+Use the **Scrape URL** tab:
+1. Copy job posting URL from LinkedIn, Indeed, or Glassdoor
+2. Paste into URL field
+3. Click "Scrape & Analyze"
+4. Review results and download report
+
+### Quick Draft Review
+
+Use the **Manual Input** tab:
+1. Copy your draft job description
+2. Paste into text field
+3. Click "Analyze"
+4. See highlighted biased terms instantly
+5. Review suggestions and revise
+
+### File-Based Workflow
+
+Use the **Upload File** tab:
+1. Save job descriptions as .txt or .md files
+2. Drag and drop into upload area
+3. Analyze and iterate
+
+## Deployment Options
+
+### Docker (Easiest for Teams)
 
 ```bash
-# Put all job ads in a folder
-mkdir job_ads
-# ... add your .txt files
+# Build and run with Docker Compose
+docker-compose up -d
 
-# Analyse all and get CSV report
-python -m inclusive_job_ad_analyser.cli --directory job_ads/ --format csv --output results.csv
+# Access at http://localhost:7860
 ```
 
-### JSON for Integration
+### Manual Deployment
 
 ```bash
-# Get JSON output for programmatic use
-python -m inclusive_job_ad_analyser.cli my_ad.txt --format json > result.json
+# Run on custom port
+python run_app.py --port 8080
+
+# Create public shareable link
+python run_app.py --share
 ```
 
-### Custom Configuration
+### Cloud Deployment
 
-```bash
-# Use custom scoring weights
-python -m inclusive_job_ad_analyser.cli my_ad.txt --config custom_settings.yaml
-```
+The app works out-of-the-box on:
+- **Hugging Face Spaces** (free hosting)
+- **Railway** 
+- **Render**
+- Any platform supporting Python + Gradio
 
 ## Next Steps
 
