@@ -175,20 +175,21 @@ Examples:
         type=str,
         help='Search query for jobs (e.g., "software engineer", "data analyst")'
     )
-    input_group.add_argument(
+
+    parser.add_argument(
         '--source',
         choices=['indeed', 'linkedin', 'glassdoor'],
         default='indeed',
         help='Job board to search (default: indeed)'
     )
-    input_group.add_argument(
+    parser.add_argument(
         '--location',
         '-l',
         type=str,
         default='',
         help='Location filter for job search (e.g., "New York, NY", "Remote")'
     )
-    input_group.add_argument(
+    parser.add_argument(
         '--max-results',
         '-m',
         type=int,

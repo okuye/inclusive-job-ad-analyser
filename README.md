@@ -93,7 +93,7 @@ No command line required! Everything works through the browser.
 python -m inclusive_job_ad_analyser --cli examples/biased_job_ad.md
 
 # Search job boards and analyse results
-python -m inclusive_job_ad_analyser --cli --search "software engineer" --source indeed --max-results 10
+python -m inclusive_job_ad_analyser --cli --search "software engineer" --source indeed --location "Remote" --max-results 10
 
 # Scrape and analyse job ad from URL
 python -m inclusive_job_ad_analyser --cli --url https://www.linkedin.com/jobs/view/123456
@@ -366,6 +366,9 @@ python -m inclusive_job_ad_analyser.webapp
 Run the comprehensive test suite:
 
 ```bash
+# Ensure dependencies (including pytest) are installed
+pip install -r requirements.txt
+
 # Run all tests
 pytest
 

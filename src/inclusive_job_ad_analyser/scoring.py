@@ -120,7 +120,7 @@ def compute_category_scores(
 
 def compute_bias_score(
     matches: List[MatchResult],
-    text_length: int,
+    text: str,
     config: Optional[ConfigLoader] = None
 ) -> float:
     """
@@ -133,7 +133,7 @@ def compute_bias_score(
     
     Args:
         matches: List of bias term matches.
-        text_length: Length of the analysed text in characters.
+        text: Full analysed text. Used for length normalization.
         config: Optional config loader for custom weights.
         
     Returns:
@@ -143,7 +143,7 @@ def compute_bias_score(
         return 100.0
     
     # Calculate word count (approximate)
-    word_count = max(1, len(text_length.split()) if isinstance(text_length, str) else text_length // 5)
+    word_count = max(1, len(text.split()))
     
     # Get normalization factor from config
     norm_factor = 100  # default: 100 words = standard job ad
@@ -211,6 +211,7 @@ def detect_positive_indicators(text: str, config: Optional[ConfigLoader] = None)
     indicators = [
         "equal opportunity employer",
         "diverse",
+        "diversity",
         "inclusive",
         "accommodations available",
         "flexible working",
@@ -277,7 +278,7 @@ def generate_recommendations(
     # Category-specific recommendations
     problem_categories = [
         (cat, score) for cat, score in category_scores.items()
-        if score.score < 75
+        if score.score < 90
     ]
     
     if problem_categories:

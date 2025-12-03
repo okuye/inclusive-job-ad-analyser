@@ -81,7 +81,7 @@ pip install requests beautifulsoup4
 
 ```bash
 # Search job boards
-python -m inclusive_job_ad_analyser --cli --search "software engineer" --source indeed
+python -m inclusive_job_ad_analyser --cli --search "software engineer" --source indeed --location "Remote" --max-results 10
 
 # Scrape URL
 python -m inclusive_job_ad_analyser --cli --url https://www.linkedin.com/jobs/view/123456
@@ -183,7 +183,7 @@ The app works out-of-the-box on:
 - 📖 Read the full [README](../README.md)
 - 🔬 Understand the [Methodology](METHODOLOGY.md)
 - 🤝 Learn how to [Contribute](CONTRIBUTING.md)
-- 🧪 Run tests: `pytest`
+- 🧪 Run tests: `pip install -r requirements.txt && pytest`
 - 📊 View statistics: `python -m inclusive_job_ad_analyser.cli --stats`
 
 ## Troubleshooting
