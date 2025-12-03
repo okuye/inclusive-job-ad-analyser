@@ -1,0 +1,49 @@
+# Scoring Configuration
+
+# Category weights (must sum to 1.0)
+category_weights:
+  gender-coded: 0.25
+  ageist: 0.25
+  ableist: 0.25
+  culture-fit: 0.15
+  socioeconomic: 0.05
+  racial: 0.05
+
+# Severity multipliers for scoring
+severity_multipliers:
+  critical: 2.0
+  high: 1.5
+  medium: 1.0
+  low: 0.5
+
+# Grade thresholds (0-100 scale)
+grade_thresholds:
+  excellent: 90
+  good: 75
+  fair: 60
+  poor: 0
+
+# Analysis settings
+analysis:
+  min_word_count: 20
+  max_word_count: 5000
+  context_window_chars: 100
+  
+# Scoring calculation
+scoring:
+  base_points_per_issue: 10
+  length_normalization: true
+  normalization_factor: 100  # words per standard job ad
+
+# Positive indicators (boost score)
+positive_indicators:
+  - "equal opportunity employer"
+  - "diverse"
+  - "inclusive"
+  - "accommodations available"
+  - "flexible working"
+  - "parental leave"
+  - "accessibility"
+  - "underrepresented"
+  - "all backgrounds"
+  - "equivalent experience"
