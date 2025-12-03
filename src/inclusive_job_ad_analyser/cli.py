@@ -9,6 +9,7 @@ from typing import Optional, List
 import csv
 
 from inclusive_job_ad_analyser.analyser import JobAdAnalyser
+from inclusive_job_ad_analyser.scraper import JobAdScraper
 from inclusive_job_ad_analyser.scoring import (
     compute_bias_score,
     get_grade,
@@ -157,6 +158,43 @@ Examples:
         type=str,
         help='Analyse all .txt files in a directory'
     )
+    input_group.add_argument(
+        '--url',
+        '-u',
+        type=str,
+        help='Scrape and analyse job ad from URL (LinkedIn, Indeed, Glassdoor, etc.)'
+    )
+    input_group.add_argument(
+        '--urls-file',
+        type=str,
+        help='File containing URLs (one per line) to scrape and analyse'
+    )
+    input_group.add_argument(
+        '--search',
+        '-s',
+        type=str,
+        help='Search query for jobs (e.g., "software engineer", "data analyst")'
+    )
+    input_group.add_argument(
+        '--source',
+        choices=['indeed', 'linkedin', 'glassdoor'],
+        default='indeed',
+        help='Job board to search (default: indeed)'
+    )
+    input_group.add_argument(
+        '--location',
+        '-l',
+        type=str,
+        default='',
+        help='Location filter for job search (e.g., "New York, NY", "Remote")'
+    )
+    input_group.add_argument(
+        '--max-results',
+        '-m',
+        type=int,
+        default=10,
+        help='Maximum number of search results to analyse (default: 10)'
+    )
     
     # Output options
     parser.add_argument(
@@ -243,6 +281,109 @@ Examples:
             text = sys.stdin.read()
             result = analyse_text(text, analyser, config)
             results = [("stdin", result)]
+        
+        elif args.url:
+            # Scrape single URL
+            try:
+                scraper = JobAdScraper()
+                print(f"Scraping {args.url}...", file=sys.stderr)
+                scraped = scraper.scrape(args.url)
+                
+                if 'error' in scraped:
+                    print(f"Error: {scraped['error']}", file=sys.stderr)
+                    sys.exit(1)
+                
+                print(f"✓ Scraped: {scraped['title']} at {scraped['company']}", file=sys.stderr)
+                result = analyse_text(scraped['text'], analyser, config)
+                results = [(f"{scraped['title']} - {scraped['company']}", result)]
+            except ImportError:
+                print("Error: Web scraping requires additional dependencies.", file=sys.stderr)
+                print("Install with: pip install requests beautifulsoup4", file=sys.stderr)
+                sys.exit(1)
+            except Exception as e:
+                print(f"Error scraping URL: {e}", file=sys.stderr)
+                sys.exit(1)
+        
+        elif args.urls_file:
+            # Scrape multiple URLs from file
+            try:
+                scraper = JobAdScraper()
+                urls_path = Path(args.urls_file)
+                
+                if not urls_path.exists():
+                    print(f"Error: URLs file not found: {urls_path}", file=sys.stderr)
+                    sys.exit(1)
+                
+                urls = [line.strip() for line in urls_path.read_text().splitlines() 
+                       if line.strip() and not line.startswith('#')]
+                
+                print(f"Scraping {len(urls)} URLs...", file=sys.stderr)
+                scraped_jobs = scraper.scrape_multiple(urls)
+                
+                results = []
+                for job in scraped_jobs:
+                    if 'error' in job:
+                        print(f"✗ Error scraping {job['url']}: {job['error']}", file=sys.stderr)
+                        continue
+                    
+                    print(f"✓ Scraped: {job['title']} at {job['company']}", file=sys.stderr)
+                    result = analyse_text(job['text'], analyser, config)
+                    results.append((f"{job['title']} - {job['company']}", result))
+                
+                if not results:
+                    print("No URLs successfully scraped", file=sys.stderr)
+                    sys.exit(1)
+            
+            except ImportError:
+                print("Error: Web scraping requires additional dependencies.", file=sys.stderr)
+                print("Install with: pip install requests beautifulsoup4", file=sys.stderr)
+                sys.exit(1)
+            except Exception as e:
+                print(f"Error: {e}", file=sys.stderr)
+                sys.exit(1)
+        
+        elif args.search:
+            # Search job boards
+            try:
+                scraper = JobAdScraper()
+                print(f"Searching {args.source} for '{args.search}'...", file=sys.stderr)
+                if args.location:
+                    print(f"Location: {args.location}", file=sys.stderr)
+                
+                scraped_jobs = scraper.search_jobs(
+                    query=args.search,
+                    source=args.source,
+                    location=args.location,
+                    max_results=args.max_results
+                )
+                
+                if not scraped_jobs:
+                    print("No jobs found matching your search", file=sys.stderr)
+                    sys.exit(1)
+                
+                print(f"Found {len(scraped_jobs)} jobs, analyzing...\n", file=sys.stderr)
+                
+                results = []
+                for job in scraped_jobs:
+                    if 'error' in job:
+                        print(f"✗ Error: {job['error']}", file=sys.stderr)
+                        continue
+                    
+                    print(f"✓ Analyzing: {job['title']} at {job['company']}", file=sys.stderr)
+                    result = analyse_text(job['text'], analyser, config)
+                    results.append((f"{job['title']} - {job['company']}", result))
+                
+                if not results:
+                    print("No jobs successfully analysed", file=sys.stderr)
+                    sys.exit(1)
+            
+            except ImportError:
+                print("Error: Web scraping requires additional dependencies.", file=sys.stderr)
+                print("Install with: pip install requests beautifulsoup4", file=sys.stderr)
+                sys.exit(1)
+            except Exception as e:
+                print(f"Error searching jobs: {e}", file=sys.stderr)
+                sys.exit(1)
         
         elif args.directory:
             # Batch mode

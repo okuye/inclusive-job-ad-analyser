@@ -1,0 +1,16 @@
+# Example URLs for testing web scraping
+
+# LinkedIn jobs
+https://www.linkedin.com/jobs/view/senior-software-engineer-example
+
+# Indeed jobs
+https://www.indeed.com/viewjob?jk=example123
+
+# Glassdoor jobs
+https://www.glassdoor.com/job-listing/example-job
+
+# Generic career pages
+https://example-company.com/careers/software-engineer
+
+# Note: These are example URLs. Replace with actual job posting URLs.
+# Lines starting with # are ignored.

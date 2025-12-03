@@ -42,7 +42,41 @@ python -m inclusive_job_ad_analyser.webapp
 
 ## Analyse Your Own Job Ad (2 minutes)
 
-### Option 1: Save to file
+### Option 1: Search Job Boards
+
+```bash
+# Search Indeed for jobs and analyse them
+python -m inclusive_job_ad_analyser.cli --search "software engineer" --source indeed --max-results 10
+
+# Search LinkedIn with location filter
+python -m inclusive_job_ad_analyser.cli --search "data analyst" --source linkedin --location "New York, NY"
+
+# Search Glassdoor for remote positions
+python -m inclusive_job_ad_analyser.cli --search "product manager" --source glassdoor --location "Remote" --max-results 5
+
+# Output results as JSON
+python -m inclusive_job_ad_analyser.cli --search "UX designer" --format json --output results.json
+```
+
+**Note**: Web scraping requires optional dependencies:
+```bash
+pip install requests beautifulsoup4
+```
+
+### Option 2: Scrape from URL
+
+```bash
+# Scrape and analyse a job posting from LinkedIn
+python -m inclusive_job_ad_analyser.cli --url https://www.linkedin.com/jobs/view/123456
+
+# Scrape from Indeed
+python -m inclusive_job_ad_analyser.cli --url https://www.indeed.com/viewjob?jk=abc123
+
+# Batch scrape multiple URLs
+python -m inclusive_job_ad_analyser.cli --urls-file examples/job_urls.txt
+```
+
+### Option 3: Save to file
 
 ```bash
 # Create a file with your job ad
@@ -56,13 +90,13 @@ EOF
 python -m inclusive_job_ad_analyser.cli my_job_ad.txt
 ```
 
-### Option 2: Use stdin
+### Option 4: Use stdin
 
 ```bash
 echo "We need a rockstar developer" | python -m inclusive_job_ad_analyser.cli --stdin
 ```
 
-### Option 3: Web interface
+### Option 5: Web interface
 
 Just paste your text into the web app!
 

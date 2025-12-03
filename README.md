@@ -66,6 +66,18 @@ python -m inclusive_job_ad_analyser.cli examples/biased_job_ad.md
 # Output JSON format
 python -m inclusive_job_ad_analyser.cli examples/biased_job_ad.md --format json
 
+# Search job boards and analyse results
+python -m inclusive_job_ad_analyser.cli --search "software engineer" --source indeed --max-results 10
+
+# Search with location filter
+python -m inclusive_job_ad_analyser.cli --search "data analyst" --source linkedin --location "Remote" --max-results 5
+
+# Scrape and analyse job ad from URL
+python -m inclusive_job_ad_analyser.cli --url https://www.linkedin.com/jobs/view/123456
+
+# Batch scrape multiple URLs from file
+python -m inclusive_job_ad_analyser.cli --urls-file examples/job_urls.txt --format json
+
 # Analyse from stdin
 cat job_ad.txt | python -m inclusive_job_ad_analyser.cli --stdin
 

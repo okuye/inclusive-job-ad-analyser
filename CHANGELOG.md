@@ -44,6 +44,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Job board search functionality for finding and analyzing multiple jobs
+- CLI arguments: `--search` for queries, `--source` for job board selection, `--location` for filtering, `--max-results` for limiting results
+- Support for searching Indeed, LinkedIn, and Glassdoor job boards
+- Web scraping functionality for extracting job ads from URLs
+- Support for LinkedIn, Indeed, Glassdoor, and generic job sites
+- CLI arguments: `--url` for single URLs, `--urls-file` for batch scraping
+- `JobAdScraper` class with site-specific extractors and search methods
+- Optional dependencies: requests and beautifulsoup4
+- Test suite for scraper module
+- Example URLs file for testing web scraping
+
 ### Planned
 - ML-based context scoring
 - LLM integration for suggestions

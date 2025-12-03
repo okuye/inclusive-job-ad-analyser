@@ -34,6 +34,10 @@ dependencies = [
 
 [project.optional-dependencies]
 web = ["gradio>=4.0.0,<5.0.0"]
+scraping = [
+    "requests>=2.31.0,<3.0.0",
+    "beautifulsoup4>=4.12.0,<5.0.0",
+]
 dev = [
     "pytest>=7.4.0,<8.0.0",
     "pytest-cov>=4.1.0,<5.0.0",
